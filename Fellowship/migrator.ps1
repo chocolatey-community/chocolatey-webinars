@@ -48,6 +48,7 @@ Param(
 
     [Parameter()]
     [PSCredential]
+    [Alias('RepositoryCredential','Credential')]
     $SonatypeCredential,
 
     [Parameter()]

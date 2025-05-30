@@ -32,7 +32,7 @@ To use our migration tool, you will need to install a couple of things on your I
 
 #### Migrator Options
 
-`RepositoryCredential` : If your Sonatype Nexus Repository requires credentials to retrieve package information, supply a PSCredential with this parameter
+`SonatypeCredential` : If your Sonatype Nexus Repository requires credentials to retrieve package information, supply a PSCredential with this parameter
 `DropPath` : Provide a custom Drop path location. This folder will house the packages from Sonatype until ProGet has processed them. 
 `ShowMigrationStatus` : Outputs a table with Success/Failure for each migrated package
 
