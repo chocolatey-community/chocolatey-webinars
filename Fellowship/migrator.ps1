@@ -27,7 +27,10 @@ Migrates all packages from the specified repository to ProGet, using the specifi
 .EXAMPLE
 .\migrator.ps1 -RepositoryUrl "https://example.com/repository/choco-repo/" -SonatypeCredential (Get-Credential) -ShowMigrationStatus
 
-Migrates all packages from the specified repository to ProGet, using the provided credentials for authentication and displaying a summary of the migration process.
+.EXAMPLE
+.\migrator.ps1 -RepositoryUrl "https://example.com/repository/repoA/","https://example.com/repository/repoB/" -SonatypeCredential (Get-Credential) -ShowMigrationStatus
+
+Migrates all packages from the specified repositories to ProGet, using the provided credentials for authentication and displaying a summary of the migration process.
 
 .NOTES
 - The script requires the `Pagootle` module to be installed.
