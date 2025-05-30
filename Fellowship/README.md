@@ -15,7 +15,7 @@ To use our migration tool, you will need to install a couple of things on your I
 1. PowerShell 7+ (minimum version 7.4.6): `choco install powershell-core -y`
 2. Pagootle, an Inedo ProGet management PowerShell Module : `Install-PSResource Pagootle -Repository PSGallery`
 3. [A ProGet API key](https://docs.inedo.com/docs/proget/api/apikeys#creating-and-managing-api-keys): Feed Type, with all feed permissions
-4. The [migrator.ps1](Fellowship/migrator.ps1)  script
+4. The [migrator.ps1](migrator.ps1)  script
 
 ### Set up the Migrator
 
@@ -23,11 +23,12 @@ To use our migration tool, you will need to install a couple of things on your I
 
 `Set-ProGetConfiguration -Hostname <your proget server> -ApiKey <your api key>`
 
-📓 If you are using SSL with your ProGet instance, add `-UseSsl` and `-SslPort` parameters to the above command
+>📓 NOTE 📓
+> If you are using SSL with your ProGet instance, add `-UseSsl` and `-SslPort` parameters to the above command
 
 2. Run the Migrator
 
-& path\to\migrator.ps1 -RepositoryUrl <your repository url>
+`& path\to\migrator.ps1 -RepositoryUrl <your repository url>`
 
 #### Migrator Options
 
