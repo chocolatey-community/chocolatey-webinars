@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>vanilla</id>
+    <version>3.0.21</version>
+    <title>vanilla (Install)</title>
+    <authors>Vendor Name</authors>
+    <tags>vanilla more tags</tags>
+    <summary>Demonstrates using an ISO in a package with an extension function</summary>
+    <description>Demonstrates using an ISO in a package with an extension function</description>
+  </metadata>
+  <files>
+    <!-- this section controls what actually gets packaged into the Chocolatey package -->
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
