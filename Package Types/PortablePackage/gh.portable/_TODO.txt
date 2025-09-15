@@ -1,0 +1,20 @@
+﻿TODO
+
+1. Get the installer binary
+
+Navigate to the GH GitHub Releases page:https://github.com/cli/cli/releases/, and download the latest version of GitHub CLI <VERSION> windows amd64
+(e.g. GitHub CLI 2.39.2 windows amd64.zip - you may need to click Show all releases to find it). This will be a zip file so,
+after the download has completed, extract it directly into the tools directory of the package.
+
+2. Compile your package
+
+We have used $version$ within the .nuspec file of the package, as we’re going to introduce a neat trick  to update this during choco pack.
+
+You can now run choco pack to compile your Chocolatey package, creating a file with a .nupkg extension, ready for installation!
+
+  1. In VS Code, press Ctrl+Shift+ P or use the View menu and click on Command Palette.
+  2. Select Chocolatey: Package Chocolatey package(s) from the prompt.
+  3. Select gh.portable.nuspec from the prompt.
+  4. Add --version 2.39.1 (or the most recent version), which will override the version in the metadata, and press Enter.
+
+3. Delete this file.

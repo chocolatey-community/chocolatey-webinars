@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>cronfection</id>
+    <version>1.0.0</version>
+    <title>cronfection (Install)</title>
+    <authors>Chocolatey Software</authors>
+    <tags>cronfection webinar</tags>
+    <summary>Demonstrates using an extension in a package to create a scheduled task</summary>
+    <description>Demonstrates using an extension in a package to create a scheduled task</description>
+    <dependencies>
+      <dependency id="tentacles" version="1.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- this section controls what actually gets packaged into the Chocolatey package -->
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
