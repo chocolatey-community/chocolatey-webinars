@@ -10,7 +10,7 @@
     <summary>Demonstrates using an extension in a package to create a scheduled task</summary>
     <description>Demonstrates using an extension in a package to create a scheduled task</description>
     <dependencies>
-      <dependency id="tentacles" version="1.0.0" />
+      <dependency id="tentacles.extension" version="1.0.0" />
     </dependencies>
   </metadata>
   <files>
