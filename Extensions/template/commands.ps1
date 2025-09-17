@@ -1,7 +1,7 @@
 
 # init extension
-choco pack ..\tentacles.extension\tentacles.extension.nuspec
-choco install tentacles.extension --source="'.'" -y
+choco pack ..\toolbox.extension\toolbox.extension.nuspec
+choco install toolbox.extension --source="'.'" -y
 
 # setup template: https://docs.chocolatey.org/en-us/guides/create/create-template/
 $templateName = "InstallTemplateWithExtensions"

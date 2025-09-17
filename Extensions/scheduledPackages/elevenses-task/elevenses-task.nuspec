@@ -2,15 +2,15 @@
 <!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
-    <id>cronfection</id>
+    <id>elevenses-task</id>
     <version>1.0.0</version>
-    <title>cronfection (Install)</title>
+    <title>elevenses-task (Install)</title>
     <authors>Chocolatey Software</authors>
-    <tags>cronfection webinar</tags>
+    <tags>task webinar</tags>
     <summary>Demonstrates using an extension in a package to create a scheduled task</summary>
     <description>Demonstrates using an extension in a package to create a scheduled task</description>
     <dependencies>
-      <dependency id="tentacles.extension" version="1.0.0" />
+      <dependency id="toolbox.extension" version="1.0.0" />
     </dependencies>
   </metadata>
   <files>

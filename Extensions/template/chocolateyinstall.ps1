@@ -12,5 +12,5 @@ $Scripttask = @{
   Script    = $script
 }
 
-# Define a sriptblock for the task to run 20 seconds from now, daily.
+# Define a scriptblock for the task to run 20 seconds from now, daily.
 New-ChocolateyScheduledTask @Scripttask

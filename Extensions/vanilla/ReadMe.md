@@ -15,3 +15,7 @@ This helper function is only available to the `vanilla` package. To use it other
 - Remember to dot source it in any scripts that need it.
 
 Extensions allow you to write it once, and use it anywhere the extension is installed without any further special handling required. Much less effort!
+
+## How would you make it better?
+
+Instead of having a helpers file, why not add a dependency on the [chocolatey-isomount.extension](https://community.chocolatey.org/packages/chocolatey-isomount.extension) package by Maurice Kevenaar, which is used in a multitude of other packages!
