@@ -3,7 +3,8 @@
 choco pack ..\toolbox.extension\toolbox.extension.nuspec
 choco install toolbox.extension --source="'.'" -y
 
-# setup template: https://docs.chocolatey.org/en-us/guides/create/create-template/
+
+
 $templateName = "InstallTemplateWithExtensions"
 
 # create items for new template
@@ -26,7 +27,7 @@ New-Item -Path $templateDir, "$templateDir\tools" -ItemType Directory
     <summary>Install [[PackageName]]</summary>
     <description>Install [[PackageName]]</description>
     <dependencies>
-        <dependency id="tentacles.extension" version="1.0.0" />
+        <dependency id="toolbox.extension" version="1.0.0" />
     </dependencies>
   </metadata>
   <files>
@@ -37,7 +38,6 @@ New-Item -Path $templateDir, "$templateDir\tools" -ItemType Directory
 
 
 # set as default template
-# https://docs.chocolatey.org/en-us/configuration/#general
 choco config set --name="'defaultTemplateName'" --value="'$templateName'"
 
 
