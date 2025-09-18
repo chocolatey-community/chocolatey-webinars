@@ -1,0 +1,3 @@
+Get-ChildItem $PSScriptRoot -Filter *.ps1 -Recurse | ForEach-Object { . $_.FullName }
+
+Export-ModuleMember -Function New-ChocolateyScheduledTask

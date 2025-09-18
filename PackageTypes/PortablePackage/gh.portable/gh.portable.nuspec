@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter
+enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+    <metadata>
+        <id>gh.portable</id>
+        <version>$version$</version>
+        <owners>__REPLACE_YOUR_NAME__</owners>
+        <title>GitHub CLI (Portable)</title>
+        <authors>GitHub</authors>
+        <projectUrl>https://cli.github.com/</projectUrl>
+        <licenseUrl>https://github.com/cli/cli/blob/trunk/LICENSE</licenseUrl>
+        <projectSourceUrl>https://github.com/cli/cli/</projectSourceUrl>
+        <bugTrackerUrl>https://github.com/cli/cli/issues</bugTrackerUrl>
+        <tags>gh cli portable example</tags>
+        <summary>GitHub on the Command Line</summary>
+        <releaseNotes>https://github.com/cli/cli/releases</releaseNotes>
+    </metadata>
+    <files>
+        <file src="bin/gh.exe" target="tools/gh.exe" />
+        <file src="LICENSE" target="tools/LICENSE.txt" />
+    </files>
+</package>
