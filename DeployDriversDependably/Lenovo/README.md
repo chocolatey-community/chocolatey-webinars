@@ -50,12 +50,14 @@ a [metapackage](https://docs.chocolatey.org/en-us/guides/create/create-meta-pack
 A metapackage is a Chocolatey package that contains no actual software or files—only dependencies on other packages. Think of it as a "bundle" or "collection" that installs multiple packages with a single command. This is ideal for standardized driver deployments across multiple systems.
 
 **How Metapackages Work:**
+
 - The metapackage's `.nuspec` file defines dependencies on individual driver packages
 - When you install the metapackage, Chocolatey's dependency resolver automatically installs all dependent packages
 - No `tools` directory or installation scripts are required
 - All the heavy lifting is done through dependency management
 
 **Benefits:**
+
 - **Simplified Deployment**: Install an entire driver set with one command (e.g., `choco install lenovo-t14-driverpack -y`)
 - **Version Management**: Update the metapackage version to reference newer driver packages
 - **Dependency Resolution**: Chocolatey handles the installation order and dependencies automatically
@@ -86,6 +88,7 @@ A metapackage is a Chocolatey package that contains no actual software or files�
 **Creating a Metapackage:**
 
 1. Create the package structure:
+
    ```powershell
    choco new lenovo-t14-gen3-driverpack --template=default
    ```
@@ -95,22 +98,26 @@ A metapackage is a Chocolatey package that contains no actual software or files�
 3. Remove the `tools` directory (not needed for metapackages)
 
 4. Pack the metapackage:
+
    ```powershell
    choco pack lenovo-t14-gen3-driverpack.nuspec
    ```
 
 5. Push to your repository:
+
    ```powershell
    choco push lenovo-t14-gen3-driverpack.2025.11.10.nupkg --source https://your-repo/
    ```
 
 **Installation:**
+
 ```powershell
 choco install lenovo-t14-gen3-driverpack -y
 ```
 
 **Uninstallation Consideration:**  
 When uninstalling a metapackage, by default only the metapackage itself is removed—the dependent driver packages remain installed. To remove all dependencies as well, use:
+
 ```powershell
 choco uninstall lenovo-t14-gen3-driverpack -y --remove-dependencies
 ```
@@ -127,6 +134,7 @@ Chocolatey supports the installation of multiple packages at once using a `packa
 - Each package can have its own configuration (version, source, parameters, etc.)
 
 **Benefits:**
+
 - **Flexible Deployment**: Easily customize which drivers to install for different scenarios
 - **No Package Creation Required**: Skip creating a metapackage—just list the packages you want
 - **Quick Testing**: Rapidly test different driver combinations without rebuilding packages
@@ -160,6 +168,7 @@ Chocolatey supports the installation of multiple packages at once using a `packa
 ```
 
 **Available Package Attributes:**
+
 - `id` (required): The package identifier
 - `version`: Specific version to install (omit for latest)
 - `source`: Custom package source/repository
@@ -175,6 +184,7 @@ Chocolatey supports the installation of multiple packages at once using a `packa
 You can use the `New-DriverPack.ps1` script to automatically generate a config file based on driver metadata from `Get-AvailableLenovoDriver.ps1`.
 
 **Basic Usage:**
+
 ```powershell
 # Get driver data
 $drivers = .\Get-AvailableLenovoDriver.ps1 -MachineType 21NY -UpdateType Driver -OperatingSystem Win11
@@ -192,6 +202,7 @@ $driverPackages = $drivers | ForEach-Object {
 ```
 
 **For detailed examples**, run:
+
 ```powershell
 Get-Help .\New-DriverPack.ps1 -Full
 ```
@@ -212,6 +223,7 @@ choco install .\driverpack.config -y --force --ignore-dependencies
 ```
 
 **What Happens During Installation:**
+
 1. Chocolatey reads the config file
 2. Each package is processed in the order listed
 3. Package-specific options (version, source, parameters) are applied
@@ -219,6 +231,7 @@ choco install .\driverpack.config -y --force --ignore-dependencies
 5. Installation proceeds for each package sequentially
 
 **Use Cases:**
+
 - **Machine-Specific Deployments**: Create different config files for different machine types or configurations
 - **Testing**: Quickly test driver combinations before creating permanent metapackages
 - **One-Off Installations**: Deploy drivers to a specific machine without creating a formal package
@@ -234,3 +247,191 @@ choco install .\driverpack.config -y --force --ignore-dependencies
 | Reusability | ⚠️ Manual distribution | ✅ Repository distribution |
 | Dependency management | ⚠️ Manual listing | ✅ Automatic |
 | Standardization | ❌ Less consistent | ✅ Highly consistent |
+
+## Jenkins Integration
+
+This repository includes Jenkins integration to automate the creation of Lenovo driver packages through a CI/CD pipeline. The Jenkins job provides a parameterized interface for building driver packages on-demand or on a schedule.
+
+### Prerequisites
+
+- Jenkins server with PowerShell plugin installed
+- `Chocolatey.Lenovo.DriverMgmt` module installed on the Jenkins agent
+- `Lenovo.Client.Scripting` module installed on the Jenkins agent
+- Appropriate permissions for the Jenkins service account to create packages
+
+### Installing the Jenkins Job
+
+The repository includes two files in the `jenkins` folder:
+
+1. **`config.xml`** - The Jenkins job configuration that defines the pipeline and parameters
+2. **`Install-Job.ps1`** - A PowerShell script to deploy the job to your Jenkins instance
+
+#### Using Install-Job.ps1
+
+The `Install-Job.ps1` script automates the installation of the Jenkins job by copying the configuration file to the appropriate Jenkins directory and restarting the service.
+
+**Basic Usage:**
+
+```powershell
+# Install with default settings (job name: "Build Driver Package")
+.\Install-Job.ps1 -JobFile .\config.xml
+
+# Install with a custom job name
+.\Install-Job.ps1 -Name "Lenovo Driver Builder" -JobFile .\config.xml
+
+# Install to a custom Jenkins home directory
+.\Install-Job.ps1 -JenkinsHome "D:\Jenkins" -Name "Build Drivers" -JobFile .\config.xml
+```
+
+**For detailed help:**
+
+```powershell
+Get-Help .\Install-Job.ps1 -Full
+```
+
+**What the script does:**
+
+1. Validates that the Jenkins service is present
+2. Creates the job folder structure in Jenkins home directory
+3. Copies the XML configuration file
+4. Restarts Jenkins to register the new job
+
+⚠️ **Note:** You need administrative privileges to restart the Jenkins service.
+
+### Jenkins Job Parameters
+
+Once installed, the Jenkins job exposes the following parameters for building driver packages:
+
+| Parameter | Description | Valid Values | Example |
+|-----------|-------------|--------------|---------|
+| `MODEL_LIST` | Comma-separated list of Lenovo model names | Any valid Lenovo model name | `ThinkPad X1 Carbon, ThinkPad P16 Gen 2` |
+| `MACHINE_TYPE` | Comma-separated list of machine type codes | 4-character Lenovo machine codes | `21FA, 20QN, 21NY` |
+| `UPDATE_TYPE` | Type of update to package | `Application`, `Driver`, `Bios`, `Firmware` | `Driver` |
+| `REBOOT_TYPE` | Filter by reboot requirement | `Forced reboot`, `Requires reboot`, `Forces shutdown`, `Delayed forced reboot` | `Requires reboot` |
+| `SEVERITY` | Filter by update severity | `Critical`, `Recommended`, `Other` | `Critical` |
+| `OPERATING_SYSTEM` | Target Windows version | `Win10`, `Win11` | `Win11` |
+| `OUTPUT_DIRECTORY` | Where to save packages | Any valid Windows path | `C:\drivers` |
+| `CATEGORY` | Driver category filter (Driver type only) | See category list below | `Audio, Networking Wireless LAN` |
+
+**Valid Category Values:**
+
+- `Audio`
+- `Bluetooth and Modem`
+- `Camera and Card Reader`
+- `Display and Video Graphics`
+- `Docking Station and Port Replicator`
+- `Fingerprint reader`
+- `Motherboard Devices Backplanes core chipset onboard video PCIe switches`
+- `Mouse Pen and Keyboard`
+- `Networking Wireless LAN`
+- `Networking Wireless WAN`
+- `Power Management`
+- `Software and Utilities`
+- `Storage`
+- `USB Device FireWire IEEE 1394 Thunderbolt`
+
+### How the Jenkins Job Works
+
+The Jenkins pipeline job uses a PowerShell script block that:
+
+1. **Collects Parameters**: Reads all job parameters from environment variables
+2. **Converts to PowerShell**: Transforms environment variable names (e.g., `MODEL_LIST`) to PascalCase parameter names (e.g., `ModelList`)
+3. **Filters Empty Values**: Only includes parameters that have values
+4. **Invokes Get-LenovoDriver**: Calls the `Get-LenovoDriver` function with all provided parameters using splatting
+
+**Pipeline Script Overview:**
+
+```powershell
+node {
+  powershell '''
+    $commandArgs = @{}
+
+    @(
+      'MODEL_LIST'
+      'MACHINE_TYPE'
+      'UPDATE_TYPE'
+      'CATEGORY'
+      'REBOOT_TYPE'
+      'SEVERITY'
+      'OPERATING_SYSTEM'
+      'OUTPUT_DIRECTORY'
+    ) | ForEach-Object {
+      $value = [System.Environment]::GetEnvironmentVariable($_)
+      
+      if (-not [String]::IsNullOrEmpty($value)) {
+        # Convert to PascalCase
+        $pascalCaseName = (Get-Culture).TextInfo.ToTitleCase($_.ToLower()).Replace('_', '')
+        $commandArgs[$pascalCaseName] = $value
+      }
+    }
+    
+    Get-LenovoDriver @commandArgs
+  '''
+}
+```
+
+### Usage Examples
+
+#### Example 1: Build Audio Drivers for Multiple Machine Types
+
+```yaml
+MODEL_LIST: (leave empty)
+MACHINE_TYPE: 21FA, 20QN
+UPDATE_TYPE: Driver
+CATEGORY: Audio
+OPERATING_SYSTEM: Win11
+OUTPUT_DIRECTORY: C:\drivers
+```
+
+#### Example 2: Build All Critical Updates for a Model
+
+```yaml
+MODEL_LIST: ThinkPad X1 Carbon
+MACHINE_TYPE: (leave empty)
+UPDATE_TYPE: Driver
+SEVERITY: Critical
+OPERATING_SYSTEM: Win11
+OUTPUT_DIRECTORY: C:\drivers
+```
+
+#### Example 3: Build Specific Driver Categories
+
+```yaml
+MODEL_LIST: (leave empty)
+MACHINE_TYPE: 21NY
+UPDATE_TYPE: Driver
+CATEGORY: Audio, Networking Wireless LAN, Display and Video Graphics
+OPERATING_SYSTEM: Win11
+OUTPUT_DIRECTORY: C:\drivers
+```
+
+### Scheduling Builds
+
+You can configure the Jenkins job to run on a schedule using standard Jenkins cron syntax:
+
+1. Open the Jenkins job configuration
+2. Under "Build Triggers", enable "Build periodically"
+3. Enter a cron expression, for example:
+   - `H 2 * * *` - Run daily at 2 AM
+   - `H H * * 0` - Run weekly on Sunday
+   - `H H 1 * *` - Run monthly on the 1st
+
+### Troubleshooting
+
+**Job fails with "Module not found":**
+- Ensure `Chocolatey.Lenovo.DriverMgmt` and `Lenovo.Client.Scripting` modules are installed in a location accessible to the Jenkins service account
+- Try installing modules system-wide: `Install-Module -Name Lenovo.Client.Scripting -Scope AllUsers`
+
+**Permission denied when creating packages:**
+- Verify the Jenkins service account has write permissions to the `OUTPUT_DIRECTORY`
+- Check that the Jenkins service account can execute Chocolatey commands
+
+**Jenkins doesn't show the new job after installation:**
+- Ensure the Jenkins service restarted successfully
+- Check Jenkins logs for errors: `C:\ProgramData\Jenkins\.jenkins\logs`
+- Verify the job folder was created: `C:\ProgramData\Jenkins\.jenkins\jobs\[JobName]`
+
+**Parameters not being passed correctly:**
+- Ensure parameter values don't contain quotes unless needed
+- For comma-separated values, use commas without spaces: `21FA,20QN,21NY`
+- Empty parameters are ignored by the script—this is expected behavior
