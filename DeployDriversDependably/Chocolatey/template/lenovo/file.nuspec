@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>[[PackageNameLower]]</id>
+    <version>[[PackageVersion]]</version>
+    <owners>[[MaintainerName]]</owners>
+    <title>[[Title]]</title>
+    <authors>Lenovo</authors>
+    <copyright>2025</copyright>
+    <tags>lenovo driver</tags>
+    <summary>This package updates your drivers</summary>
+    <description>This describes the drivers</description>
+    <dependencies>
+      <dependency id='lenovo-thininstaller' version='1.4.2.24' />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
