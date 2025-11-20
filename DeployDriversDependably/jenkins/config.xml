@@ -1,0 +1,89 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1520.v56d65e3b_4566">
+  <actions/>
+  <description>Builds driver packages for Lenovo Systems.</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty>
+      <abortPrevious>false</abortPrevious>
+    </org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>MODEL_LIST</name>
+          <description>List of Lenovo models (comma separated)</description>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>MACHINE_TYPE</name>
+          <description>List of Lenovo machine type codes (comma separated</description>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>UPDATE_TYPE</name>
+          <description>Valid values are Application, Driver, Bios, Firmware</description>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>REBOOT_TYPE</name>
+          <description>Valid values are: &apos;Forced reboot&apos;, &apos;Requires reboot&apos;, &apos;Forces shutdown&apos;, &apos;Delayed forced reboot&apos;</description>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SEVERITY</name>
+          <description>Valid values are: Critical, Recommended, Other</description>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>OPERATING_SYSTEM</name>
+          <description>Valid values are: Win10, Win11</description>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>OUTPUT_DIRECTORY</name>
+          <defaultValue>C:\drivers</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>CATEGORY</name>
+          <description>Category of driver to package. Valid values: &apos;Audio&apos;, &apos;Bluetooth and Modem&apos;, &apos;Camera and Card Reader&apos;, &apos;Display and Video Graphics&apos;, &apos;Docking Station and Port Replicator&apos;, &apos;Fingerprint reader&apos;, &apos;Motherboard Devices Backplanes core chipset onboard video PCIe switches&apos;, &apos;Mouse Pen and Keyboard,&apos; &apos;Networking Wireless LAN&apos;, &apos;Networking Wireless WAN&apos;, &apos;Power Management&apos;, &apos;Software and Utilities&apos;, &apos;Storage&apos;, &apos;USB Device FireWire IEEE 1394 Thunderbolt&apos;</description>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@4046.v90b_1b_9edec67">
+    <script>  node {
+      powershell &apos;&apos;&apos;
+        $commandArgs = @{}
+
+        @(
+        &apos;MODEL_LIST&apos;
+        &apos;MACHINE_TYPE&apos;
+        &apos;UPDATE_TYPE&apos;
+        &apos;CATEGORY&apos;
+        &apos;REBOOT_TYPE&apos;
+        &apos;SEVERITY&apos;
+        &apos;OPERATING_SYSTEM&apos;
+        &apos;OUTPUT_DIRECTORY&apos;
+        )| ForEach-Object {
+             $value = [System.Environment]::GetEnvironmentVariable($_)
+            
+            if (-not [String]::IsNullOrEmpty($value)) {
+                # Convert to PascalCase
+                $pascalCaseName = (Get-Culture).TextInfo.ToTitleCase($_.ToLower()).Replace(&apos;_&apos;, &apos;&apos;)
+                $commandArgs[$pascalCaseName] = $value
+            }
+        }
+        &quot;Using:&quot;
+        $commandArgs
+        
+        Get-LenovoDriver @commandArgs
+      &apos;&apos;&apos;
+  }
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
